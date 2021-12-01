@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/data/data.dart';
+import 'package:music_app/landing_page.dart';
+import 'package:music_app/screens/admin_cms.dart';
+import 'package:music_app/screens/playlist_screen.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -18,7 +21,7 @@ class SideMenu extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Image.asset(
                   'assets/logo/beatz-logo-transparent.png',
-                  height: 65.0,
+                  height: 75.0,
                   filterQuality: FilterQuality.high,
                 ),
               ),
@@ -35,9 +38,12 @@ class SideMenu extends StatelessWidget {
             onTap: () {},
           ),
           _SideMenuIconTab(
-            iconData: Icons.audiotrack,
-            title: 'Radio',
-            onTap: () {},
+            iconData: Icons.admin_panel_settings,
+            title: 'Admin',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AdminApp()));
+            },
           ),
           const SizedBox(height: 12.0),
           _LibraryPlaylists(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/current_track_model.dart';
 import 'package:provider/provider.dart';
-import 'package:music_app/data/data.dart';
+import 'package:music_app/entities/songs.dart';
 
 class TracksList extends StatelessWidget {
   final List<Song> tracks;
@@ -10,6 +10,13 @@ class TracksList extends StatelessWidget {
     Key? key,
     required this.tracks,
   }) : super(key: key);
+
+  String getTimeString(int seconds) {
+    String minuteString =
+        '${(seconds / 60).floor() < 10 ? 0 : ''}${(seconds / 60).floor()}';
+    String secondString = '${seconds % 60 < 10 ? 0 : ''}${seconds % 60}';
+    return '$minuteString:$secondString'; // Returns a string with the format mm:ss
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,7 @@ class TracksList extends StatelessWidget {
               Text(e.album, style: textStyle),
             ),
             DataCell(
-              Text(e.duration, style: textStyle),
+              Text(getTimeString(int.parse(e.duration)), style: textStyle),
             ),
           ],
           selected: selected,

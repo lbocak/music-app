@@ -1,33 +1,66 @@
 import 'package:flutter/material.dart';
-
-import 'package:music_app/data/data.dart';
+import 'package:music_app/data/services.dart';
+import 'package:music_app/entities/playlists.dart';
+import 'package:music_app/entities/songs.dart';
+import 'package:music_app/landing_page.dart';
+import 'package:music_app/login.dart';
 import 'package:music_app/widgets/widgets.dart';
 
 class PlaylistScreen extends StatefulWidget {
-  final Playlist playlist;
-
-  const PlaylistScreen({
-    Key? key,
-    required this.playlist,
-  }) : super(key: key);
-
   @override
   _PlaylistScreenState createState() => _PlaylistScreenState();
 }
 
 class _PlaylistScreenState extends State<PlaylistScreen> {
   ScrollController? _scrollController;
+  List<Playlist> _playlist = [
+    Playlist(
+        id: '1',
+        title: 'title',
+        imagePath: 'assets/artwork.jpg',
+        description: 'description',
+        creator: 'creator')
+  ];
+  List<Song> _song = [
+    Song(
+        id: 'id',
+        title: 'title',
+        path: 'path',
+        imagePath: 'assets/artwork.jpg',
+        artist: 'artist',
+        album: 'album',
+        duration: 'duration')
+  ];
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _playlist;
+    _getPlaylist();
+    _getSongs();
   }
 
   @override
   void dispose() {
     _scrollController?.dispose();
     super.dispose();
+  }
+
+  _getPlaylist() {
+    Services.getPlaylists().then((List<Playlist> playlist) {
+      setState(() {
+        _playlist = playlist;
+      });
+    });
+  }
+
+  _getSongs() {
+    Services.getSongs().then((song) {
+      setState(() {
+        _song = song;
+      });
+    });
   }
 
   @override
@@ -45,27 +78,21 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             children: [
               InkWell(
                 customBorder: const CircleBorder(),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MusicApp()));
+                },
                 child: Container(
                   padding: const EdgeInsets.all(6.0),
                   decoration: const BoxDecoration(
                     color: Colors.black26,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.chevron_left, size: 28.0),
-                ),
-              ),
-              const SizedBox(width: 16.0),
-              InkWell(
-                customBorder: const CircleBorder(),
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: const BoxDecoration(
-                    color: Colors.black26,
-                    shape: BoxShape.circle,
+                  child: const Icon(
+                    Icons.chevron_left,
+                    size: 28.0,
+                    color: Colors.white,
                   ),
-                  child: const Icon(Icons.chevron_right, size: 28.0),
                 ),
               ),
             ],
@@ -86,8 +113,11 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           const SizedBox(width: 8.0),
           IconButton(
             padding: const EdgeInsets.only(),
-            icon: const Icon(Icons.keyboard_arrow_down, size: 30.0),
-            onPressed: () {},
+            icon: const Icon(Icons.logout, size: 30.0),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
+            },
           ),
           const SizedBox(width: 20.0),
         ],
@@ -99,7 +129,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              const Color(0xFFAF1018),
+              const Color(0xFF15AF10),
               Theme.of(context).backgroundColor,
             ],
             stops: const [0, 0.3],
@@ -115,8 +145,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               vertical: 60.0,
             ),
             children: [
-              PlaylistHeader(playlist: widget.playlist),
-              TracksList(tracks: widget.playlist.songs),
+              PlaylistHeader(playlist: _playlist),
+              TracksList(tracks: _song),
             ],
           ),
         ),

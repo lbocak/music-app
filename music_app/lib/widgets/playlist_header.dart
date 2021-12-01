@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/entities/playlists.dart';
 
-import 'package:music_app/data/data.dart';
+//import 'package:music_app/data/data.dart';
 
 class PlaylistHeader extends StatelessWidget {
-  final Playlist playlist;
+  List<Playlist> playlist;
 
-  const PlaylistHeader({
+  PlaylistHeader({
     Key? key,
     required this.playlist,
   }) : super(key: key);
@@ -17,7 +18,7 @@ class PlaylistHeader extends StatelessWidget {
         Row(
           children: [
             Image.asset(
-              playlist.imageURL,
+              'assets/artwork.jpg',
               height: 200.0,
               width: 200.0,
               fit: BoxFit.cover,
@@ -35,16 +36,16 @@ class PlaylistHeader extends StatelessWidget {
                         .copyWith(fontSize: 12.0),
                   ),
                   const SizedBox(height: 12.0),
-                  Text(playlist.name,
+                  Text(playlist[0].title,
                       style: Theme.of(context).textTheme.headline2),
                   const SizedBox(height: 16.0),
                   Text(
-                    playlist.description,
+                    playlist[0].description,
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   const SizedBox(height: 16.0),
                   Text(
-                    'Created by ${playlist.creator} • ${playlist.songs.length} songs, ${playlist.duration}',
+                    'Created by ${playlist[0].creator}',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ],
@@ -52,20 +53,13 @@ class PlaylistHeader extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 20.0),
-        _PlaylistButtons(followers: playlist.followers),
       ],
     );
   }
 }
 
 class _PlaylistButtons extends StatelessWidget {
-  final String followers;
-
-  const _PlaylistButtons({
-    Key? key,
-    required this.followers,
-  }) : super(key: key);
+  const _PlaylistButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +95,6 @@ class _PlaylistButtons extends StatelessWidget {
           iconSize: 30.0,
           onPressed: () {},
         ),
-        const Spacer(),
-        Text(
-          'FOLLOWERS\n$followers',
-          style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 12.0),
-          textAlign: TextAlign.right,
-        )
       ],
     );
   }
